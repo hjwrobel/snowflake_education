@@ -63,26 +63,3 @@ if ingredients_list:
         session.sql(my_insert_stmt).collect()
 #        st.success('Your Smoothie is ordered: ' + name_on_order, icon="✅")
         st.success('Your Smoothie ' + name_on_order + ' is ordered: ', icon="✅")
-
-
-ALTER TABLE FRUIT_OPTIONS ADD COLUMN SEARCH_ON 
-
-UPDATE statement. 
-UPDATE FRUIT_OPTIONS set SEARCH_ON = FRUIT_NAME;
-    
-UPDATE FRUIT_OPTIONS set SEARCH_ON = 'Apples' 
-where FRUIT_NAME = 'Apple';
-
-UPDATE FRUIT_OPTIONS set SEARCH_ON = 'Blueberries' 
-where FRUIT_NAME = 'Blueberry';
-
-UPDATE FRUIT_OPTIONS set SEARCH_ON = 'Jack Fruit' 
-where FRUIT_NAME = 'Jack Fruit';
-
-UPDATE FRUIT_OPTIONS set SEARCH_ON = 'Raspberries' 
-where FRUIT_NAME = 'Raspberry';
-
-UPDATE FRUIT_OPTIONS set SEARCH_ON = 'Strawberries' 
-where FRUIT_NAME = 'Strawberry';
-
-# Apples, Blueberries, Jack Fruit, Raspberries and Strawberries
