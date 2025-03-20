@@ -1,5 +1,6 @@
 # Import python packages
 import streamlit as st
+import requests
 #from snowflake.snowpark.context import get_active_session
 from snowflake.snowpark.functions import col
 
@@ -24,7 +25,13 @@ st.write('The name on your smoothie will be:', name_on_order)
 cnx = st.connection("snowflake")
 session = cnx.session()
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
-st.dataframe(data=my_dataframe, use_container_width=True)
+# st.dataframe(data=my_dataframe, use_container_width=True)
+# st.stop()
+
+# Conver the Snowpark DataFrame to a Pandas DataFrame so we can use the LOC function
+pd_df=my_dataframe.to_pandas()
+st.dataframe(pd_df)
+st.stop()
 
 ingredients_list = st.multiselect(
     'Choose up to 5 ingrdients:'
@@ -40,11 +47,13 @@ if ingredients_list:
 
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + ' '
-
-    #st.write(ingredients_string)
+        st.subheader(fruit_chosen + 'Nutrition Information')
+        smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon" + fruit_chosen)
+        st_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
 
     my_insert_stmt = """ insert into smoothies.public.orders(ingredients, name_on_order)
             values ('""" + ingredients_string + """', '""" + name_on_order + """')"""
+            
 
 #    st.write(my_insert_stmt)
 #    st.stop()
@@ -56,3 +65,24 @@ if ingredients_list:
         st.success('Your Smoothie ' + name_on_order + ' is ordered: ', icon="✅")
 
 
+ALTER TABLE FRUIT_OPTIONS ADD COLUMN SEARCH_ON 
+
+UPDATE statement. 
+UPDATE FRUIT_OPTIONS set SEARCH_ON = FRUIT_NAME;
+    
+UPDATE FRUIT_OPTIONS set SEARCH_ON = 'Apples' 
+where FRUIT_NAME = 'Apple';
+
+UPDATE FRUIT_OPTIONS set SEARCH_ON = 'Blueberries' 
+where FRUIT_NAME = 'Blueberry';
+
+UPDATE FRUIT_OPTIONS set SEARCH_ON = 'Jack Fruit' 
+where FRUIT_NAME = 'Jack Fruit';
+
+UPDATE FRUIT_OPTIONS set SEARCH_ON = 'Raspberries' 
+where FRUIT_NAME = 'Raspberry';
+
+UPDATE FRUIT_OPTIONS set SEARCH_ON = 'Strawberries' 
+where FRUIT_NAME = 'Strawberry';
+
+# Apples, Blueberries, Jack Fruit, Raspberries and Strawberries
